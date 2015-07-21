@@ -1,6 +1,20 @@
 #!/bin/bash
 
-./configure --prefix=$PREFIX --enable-linux-lfs --with-zlib=$PREFIX --with-ssl --enable-cxx
+if [ `uname` == Darwin ]; then
+	export CC=clang
+	export CXX=clang++
+	
+	./configure --prefix=$PREFIX --disable-static \
+	    --with-zlib=$PREFIX \
+	    --enable-cxx \
+	    --enable-shared \
+	    -with-pic
+else
+	./configure --prefix=$PREFIX --disable-static \
+		--enable-linux-lfs --with-zlib=$PREFIX \
+		--enable-cxx --enable-shared
+fi
+
 make
 make install
 
